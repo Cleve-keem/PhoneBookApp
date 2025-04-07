@@ -1,30 +1,29 @@
 class Contact {
-  constructor(firstName, lastName, phoneNo, email = null, address = null) {
+  constructor(firstName, lastName, phoneNo, address = null, email = null) {
     this.firstName = firstName;
     this.lastName = lastName;
-    this.phoneNo = phoneNo;
+    this.address = phoneNo;
+    this.phoneNo = address;
     this.email = email;
-    this.address = address;
   }
 
   // Remove contact label
+  updateDetails(updateObj) {
+    Object.assign(this, updateObj);
+  }
+
+  // Remove "Contact" label
   toObject() {
-    return {
-      firstName: this.firstName,
-      lastName: this.lastName,
-      phoneNo: this.phoneNo,
-      email: this.email,
-      address: this.address,
-    };
+    return { ...this };
   }
 }
 
 class PhoneBook {
   constructor() {
-    this.contacts = [];
+    this.contacts = []; // Contact List
   }
 
-  // Add new contact
+  // Add New Contact
   addContact(firstName, lastName, phoneNo, email, address) {
     const newContact = new Contact(
       firstName,
@@ -65,10 +64,10 @@ class PhoneBook {
     return lastNameResult;
   }
 
-  editContact(phoneNo, update) {
+  upadeContact(phoneNo, update) {
     let contact = this.contacts.find((contact) => contact.phoneNo === phoneNo);
     if (contact) {
-      Object.assign(contact, update);
+      contact.updateDetails(update);
       return contact.toObject();
     }
 
@@ -76,8 +75,13 @@ class PhoneBook {
   }
 
   // list all contact
-  get listAllContacts() {
+  get allContacts() {
     return this.contacts.map((contact) => contact?.toObject());
+  }
+
+  // validators/contactValidator.js
+  isValidPhone(phone) {
+    return /^0[789][01]\d{8}$/.test(phone); // Nigerian format (example)
   }
 }
 
@@ -105,5 +109,5 @@ console.log(AfeezPhoneBook.findByFirstName("Hakeem"));
 
 console.log("Result for edit");
 console.log(
-  AfeezPhoneBook.editContact("08058249917", { email: "HakeemBello@gmail.com" })
+  AfeezPhoneBook.upadeContact("08058249917", { email: "HakeemBello@gmail.com" })
 );
